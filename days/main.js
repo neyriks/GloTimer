@@ -1,5 +1,5 @@
 'use strict';
-
+const timerNow = document.querySelector('#tiwerNow');
 const data = new Date();
 const weekday = new Array(7);
 weekday[0] = "Воскресенье";
@@ -22,7 +22,7 @@ function helloBuddy() {
     }
 }
 helloBuddy();
-console.log('Сегодня: ' + weekday[data.getDay()]);
+timerNow.textContent('Сегодня: ' + weekday[data.getDay()]);
 console.log('Текущее время: ' + data.toLocaleTimeString('en'));
 function countTimer(deadline) {
     function getTimeRemaining() {
@@ -33,7 +33,7 @@ function countTimer(deadline) {
             minutes = Math.floor((timeRemaining / 60) % 60),
             hours = Math.floor(timeRemaining / 60 / 60) % 24,
             days = Math.floor((timeRemaining / 60 / 60) / 24);
-        console.log('До нового года осталось: ' + days);
+        console.log('До нового года осталось: ' + days + ' дней');
         return { timeRemaining, hours, minutes, seconds, days };
     }
     getTimeRemaining();

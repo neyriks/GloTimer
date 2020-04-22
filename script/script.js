@@ -40,6 +40,55 @@ window.addEventListener('DOMContentLoaded', () => {
             timerSeconds.textContent = '00';
         }
 
+
     }
-    countTimer('23 april 2020');
+    countTimer('30 april 2020');
+
+    // Menu
+    const toogleMenu = () => {
+        const btnMenu = document.querySelector('.menu'),
+            menu = document.querySelector('menu'),
+            closeBtn = document.querySelector('.close-btn'),
+            menuItems = menu.querySelectorAll('ul>li');
+
+        const handlerMenu = () => {
+            menu.classList.toggle('active-menu');
+        };
+
+        btnMenu.addEventListener('click', handlerMenu);
+        closeBtn.addEventListener('click', handlerMenu);
+
+        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+        // Убираем анимацию у телефонов
+        let count = -100;
+        const menuAnimation = () => {
+            if (document.documentElement.clientWidth  < 768) { // Проверка на экран
+                menu.style.transition = 'none';
+                return;
+            }
+            const fps = requestAnimationFrame(menuAnimation); //вычисляем фпс
+            count += 2;
+            menu.style.transform = `translate ${count}%`;
+            if (count === 0) {
+                cancelAnimationFrame(fps);
+            }
+        };
+        menuAnimation();
+    };
+    toogleMenu();
+    //popup
+    const togglePopUp = () => {
+        const popup = document.querySelector('.popup'),
+            popupBtn = document.querySelectorAll('.popup-btn'),
+            popupClose = document.querySelector('.popup-close');
+        popupBtn.forEach(elem => {
+            elem.addEventListener('click', () => {
+                popup.style.display = 'block';
+            });
+        });
+        popupClose.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    };
+    togglePopUp();
 });
