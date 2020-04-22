@@ -1,7 +1,5 @@
 'use strict';
 window.addEventListener('DOMContentLoaded', () => {
-
-
     // Timer
     function countTimer(deadline) {
         const timerHours = document.querySelector('#timer-hours'),
@@ -26,24 +24,21 @@ window.addEventListener('DOMContentLoaded', () => {
             return time;
         }
 
-
-        setInterval(() => {
+        const updateTimer = setInterval(() => {
             const timer = getTimeRemaining();
             timerHours.textContent = formatTime(timer.hours);
             timerMinutes.textContent = formatTime(timer.minutes);
             timerSeconds.textContent = formatTime(timer.seconds);
+
+            if (timer.timeRemaining < 0) {
+                clearInterval(updateTimer);
+                timerHours.textContent = '00';
+                timerMinutes.textContent = '00';
+                timerSeconds.textContent = '00';
+            }
         }, 1000);
-        if (getTimeRemaining <= 0) {
-            clearInterval(countTimer);
-            timerHours.textContent = '00';
-            timerMinutes.textContent = '00';
-            timerSeconds.textContent = '00';
-        }
-
-
     }
     countTimer('30 april 2020');
-
     // Menu
     const toogleMenu = () => {
         const btnMenu = document.querySelector('.menu'),
@@ -58,7 +53,9 @@ window.addEventListener('DOMContentLoaded', () => {
         btnMenu.addEventListener('click', handlerMenu);
         closeBtn.addEventListener('click', handlerMenu);
 
-        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu, () => {
+            menuItems.scrollIntoView({ behavior: 'smooth' });
+        }));
         // Убираем анимацию у телефонов
         let count = -100;
         const menuAnimation = () => {
