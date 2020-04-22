@@ -53,9 +53,32 @@ window.addEventListener('DOMContentLoaded', () => {
         btnMenu.addEventListener('click', handlerMenu);
         closeBtn.addEventListener('click', handlerMenu);
 
-        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu, () => {
-            menuItems.scrollIntoView({ behavior: 'smooth' });
-        }));
+        menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
+        // Плавная прокрутка
+        const anchors = document.querySelectorAll('li>a[href^="#"]');
+        console.log(anchors);
+        for (const anchor of anchors) {
+            anchor.addEventListener('click', event => {
+                event.preventDefault();
+                const blockID = anchor.getAttribute('href');
+                document.querySelector('' + blockID).scrollIntoVeiw({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        }
+        // Плавная прокрутка для кнопки.
+        const btnScrollDown = document.querySelector('a[href="#service-block"]');
+        for (const dropDown of btnScrollDown) {
+            dropDown.addEventListener('click', e => {
+                e.preventDefault();
+                const blockID = dropDown.getAttribute('href');
+                document.querySelector('' + blockID).scrollIntoVeiw({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        }
         // Убираем анимацию у телефонов
         let count = -100;
         const menuAnimation = () => {
