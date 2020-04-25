@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log(target);
             if (target.classList.contains('CLOSE-BTN')) {
                 handlerMenu();
-            } else if (target.tagName === 'LI') {
+            } else if (target.closest('li')) {
                 handlerMenu();
             }
             return;
