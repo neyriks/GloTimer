@@ -171,17 +171,17 @@ window.addEventListener('DOMContentLoaded', () => {
     const slider = () => {
         const slide = document.querySelectorAll('.portfolio-item'),
             btn = document.querySelectorAll('.portfolio-btn'),
-            dot = document.querySelectorAll('.dot'),
             slider = document.querySelector('.portfolio-content'),
-            portfolioDots = document.querySelectorAll('.portfolio-dots');
+            portfolioDots = document.querySelector('.portfolio-dots');
 
         let currentSlide = 0,
             interval;
         for (let i = 0; i < slide.length; i++) { // проверяем с длиной массива slide
             portfolioDots.insertAdjacentHTML('beforeend', // Добавить в конце
-                `<li class="dot"></li>` // li с классом dot
+                `<li class="dot ${i === 0 ? 'dot-active' : ''}"></li>` // li с классом dot
             );
         }
+        const dot = document.querySelectorAll('.dot');
         const prevSlide = (elem, index, strClass) => {
             elem[index].classList.remove(strClass);
         };
