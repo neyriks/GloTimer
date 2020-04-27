@@ -48,7 +48,6 @@ window.addEventListener('DOMContentLoaded', () => {
             menu.classList.toggle('active-menu');
         };
         btnMenu.addEventListener('click', handlerMenu);
-        // closeBtn.addEventListener('click', handlerMenu);
         menu.addEventListener('click', event => {
             const target = event.target;
             console.log(target);
@@ -59,8 +58,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             return;
         });
-
-        // menuItems.forEach(elem => elem.addEventListener('click', handlerMenu));
         const anchors = document.querySelectorAll('li>a[href^="#"]'),
             btnScrollDown = document.querySelector('a[href="#service-block"]'),
             links = [...anchors, btnScrollDown];
@@ -136,7 +133,6 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     togglePopUp();
     // табы
-
     const tabs = () => {
         const tabHeader = document.querySelector('.service-header'),
             tab = tabHeader.querySelectorAll('.service-header-tab'),
@@ -246,5 +242,25 @@ window.addEventListener('DOMContentLoaded', () => {
         });
         startSlide(1500);
     };
+    // Калькулятор, проверка на ввод букв.
+    const calculator = () => {
+        const calcItem = document.querySelectorAll('input[type="number"]');
+        calcItem.addEventListener('input', () => {
+            const text = calcItem.value;
+            calcItem.textContent = text.replace(/\D/g, '');
+        });
+    };
+    calculator();
+    // Смена аватара
+    const images = () => {
+        const img = document.querySelectorAll('#command .row img');
+        img.addEventListener('mouseenter', () => {
+            event.target.src = event.target.dataset.img;
+        });
+        img.addEventListener('mouseout', () => {
+            event.target.img = event.target.dataset.src;
+        });
+    };
+    images();
     slider();
 });
