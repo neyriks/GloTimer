@@ -50,7 +50,6 @@ window.addEventListener('DOMContentLoaded', () => {
         btnMenu.addEventListener('click', handlerMenu);
         menu.addEventListener('click', event => {
             const target = event.target;
-            console.log(target);
             if (target.classList.contains('close-btn')) {
                 handlerMenu();
             } else if (target.closest('li')) {
@@ -103,7 +102,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     const start = performance.now();
                     requestAnimationFrame(function animate(time) {
                         let timeFraction = (time - start) / duration;
-                        if (timeFraction > 1) timeFraction = 1;
+                        if (timeFraction > 1) {
+                            timeFraction = 1;
+                        }
                         const progress = timing(timeFraction);
                         draw(progress);
                         if (timeFraction < 1) {
@@ -166,7 +167,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Слайдер
     const slider = () => {
         const slide = document.querySelectorAll('.portfolio-item'),
-            btn = document.querySelectorAll('.portfolio-btn'),
             slider = document.querySelector('.portfolio-content'),
             portfolioDots = document.querySelector('.portfolio-dots');
 
@@ -243,6 +243,7 @@ window.addEventListener('DOMContentLoaded', () => {
         startSlide(1500);
     };
     // Калькулятор, проверка на ввод букв.
+    // eslint-disable-next-line no-unused-vars
     const calculator = () => {
         const calcItem = document.querySelectorAll('input[type="number"]');
         calcItem.addEventListener('input', () => {
@@ -250,10 +251,10 @@ window.addEventListener('DOMContentLoaded', () => {
             calcItem.textContent = text.replace(/\D/g, '');
         });
     };
-    calculator();
     // Смена аватара
     const images = () => {
-        const img = document.querySelectorAll('#command .row img');
+        const img = document.querySelector('#command .row img');
+        console.log(img);
         img.addEventListener('mouseenter', () => {
             event.target.src = event.target.dataset.img;
         });
