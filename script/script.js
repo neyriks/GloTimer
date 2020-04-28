@@ -243,23 +243,29 @@ window.addEventListener('DOMContentLoaded', () => {
         startSlide(1500);
     };
     // Калькулятор, проверка на ввод букв.
-    // eslint-disable-next-line no-unused-vars
     const calculator = () => {
-        const calcItem = document.querySelectorAll('input[type="number"]');
-        calcItem.addEventListener('input', () => {
-            const text = calcItem.value;
-            calcItem.textContent = text.replace(/\D/g, '');
+        const input = document.querySelectorAll('.calc-item');
+        input.forEach(e => {
+            e.addEventListener('input', e => {
+                e.target.value = e.target.value.replace(/\D/gi, '');
+            });
         });
     };
+    calculator();
     // Смена аватара
     const images = () => {
-        const img = document.querySelector('#command .row img');
-        console.log(img);
-        img.addEventListener('mouseenter', () => {
-            event.target.src = event.target.dataset.img;
-        });
-        img.addEventListener('mouseout', () => {
-            event.target.img = event.target.dataset.src;
+        const img = document.querySelectorAll('.command__photo');
+        let oldSrc;
+        img.forEach(img => {
+            img.addEventListener('mouseenter', e => {
+                oldSrc = e.target.src;
+                event.target.src = event.target.dataset.img;
+            });
+            img.addEventListener('mouseout', e => {
+                const oldImg = e.target;
+                oldImg.src = oldSrc;
+                // event.target.img = event.target.oldImg;
+            });
         });
     };
     images();
