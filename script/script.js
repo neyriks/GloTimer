@@ -38,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }, 1000);
     }
-    countTimer('30 april 2020');
+    countTimer('30 may 2020');
     // Menu
     const toogleMenu = () => {
         const btnMenu = document.querySelector('.menu'),
@@ -309,4 +309,65 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     };
     calc(100);
+
+    //send-ajax-form
+    const sendForm = () => {
+        const errorMessage = 'Что-то пошло не так',
+            loadMessage = 'Загрузка...',
+            successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+        const form = document.querySelectorAll('form');
+        const statusMessage = document.createElement('div');
+        statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
+
+        form.forEach(form => {
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                form.appendChild(statusMessage);
+                statusMessage.textContent = loadMessage;
+                const formData = new FormData(form);
+                const body = {};
+                // for (const val of formData.entries()) {
+                //     body[val[0]] = val[1];
+                // }
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+                // eslint-disable-next-line no-use-before-define
+                postData(body, () => {
+                    statusMessage.textContent = successMessage;
+                }, error => {
+                    statusMessage.textContent = errorMessage;
+                    console.log(error);
+                });
+            });
+            const postData = (body, outputData, errorData) => {
+                const request = new XMLHttpRequest();
+                request.addEventListener('readystatechange', () => {
+                    if (request.readyState !== 4) {
+                        return;
+                    }
+                    if (request.status === 200) {
+                        outputData();
+                        form.reset();
+                    } else {
+                        errorData(request.status);
+                    }
+                });
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify(body));
+            };
+            // Валидация формы.
+            form.addEventListener('input', event => {
+                const target = event.target;
+                if (target.name === 'user_phone') {
+                    target.value = target.value.replace(/[^\\+\d]/g, '');
+                }
+                if (target.name === 'user_name' || target.name === 'user_message') {
+                    target.value = target.value.replace(/[^а-я ]/gi, '');
+                }
+            });
+        });
+    };
+    sendForm();
 });
