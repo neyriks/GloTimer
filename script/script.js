@@ -315,11 +315,11 @@ window.addEventListener('DOMContentLoaded', () => {
         const errorMessage = 'Что-то пошло не так',
             loadMessage = 'Загрузка...',
             successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
-        const form = document.querySelectorAll('form');
+        const forms = document.querySelectorAll('form');
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
 
-        form.forEach(form => {
+        forms.forEach(form => {
             form.addEventListener('submit', event => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
