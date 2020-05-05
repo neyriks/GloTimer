@@ -319,6 +319,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
         forms.forEach(form => {
+            const postData = body => new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+                request.addEventListener('readystatechange', () => {
+                    if (request.readyState !== 4) {
+                        return;
+                    }
+                    if (request.status === 200) {
+                        resolve();
+                        form.reset();
+                    } else {
+                        reject(request.status);
+                    }
+                });
+                request.open('POST', './server.php');
+                request.setRequestHeader('Content-Type', 'application/json');
+                request.send(JSON.stringify(body));
+            });
             form.addEventListener('submit', event => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
@@ -331,32 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.forEach((val, key) => {
                     body[key] = val;
                 });
-                postData(body, () => {
-                    statusMessage.textContent = successMessage;
-                }, error => {
-                    statusMessage.textContent = errorMessage;
-                    console.log(error);
-                });
+                postData(body).then(successMessage).catch(errorMessage);
             });
-            const postData = body => {
-                return new Promise((resolve, reject) => {
-                    const request = new XMLHttpRequest();
-                    request.addEventListener('readystatechange', () => {
-                        if (request.readyState !== 4) {
-                            return;
-                        }
-                        if (request.status === 200) {
-                            resolve();
-                            form.reset();
-                        } else {
-                            reject(request.status);
-                        }
-                    });
-                    request.open('POST', './server.php');
-                    request.setRequestHeader('Content-Type', 'application/json');
-                    request.send(JSON.stringify(body));
-                });
-            };
             // Валидация формы.
             form.addEventListener('input', event => {
                 const target = event.target;
@@ -367,9 +360,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     target.value = target.value.replace(/[^а-я ]/gi, '');
                 }
             });
-            postData(body)
-                .then()
-                .catch(error);
         });
     };
     sendForm();
