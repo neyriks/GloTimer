@@ -1,5 +1,5 @@
 'use strict';
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // Timer
     function countTimer(deadline) {
         const timerHours = document.querySelector('#timer-hours'),
@@ -126,7 +126,7 @@ window.addEventListener('DOMContentLoaded', () => {
         popupClose.addEventListener('click', () => {
             popup.style.display = 'none';
         });
-        window.addEventListener('click', e => {
+        document.addEventListener('click', e => {
             if (e.target === popup) {
                 popup.style.display = 'none';
             }
@@ -318,7 +318,6 @@ window.addEventListener('DOMContentLoaded', () => {
         const forms = document.querySelectorAll('form');
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
-
         forms.forEach(form => {
             form.addEventListener('submit', event => {
                 event.preventDefault();
@@ -332,7 +331,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 formData.forEach((val, key) => {
                     body[key] = val;
                 });
-                // eslint-disable-next-line no-use-before-define
                 postData(body, () => {
                     statusMessage.textContent = successMessage;
                 }, error => {
@@ -340,22 +338,24 @@ window.addEventListener('DOMContentLoaded', () => {
                     console.log(error);
                 });
             });
-            const postData = (body, outputData, errorData) => {
-                const request = new XMLHttpRequest();
-                request.addEventListener('readystatechange', () => {
-                    if (request.readyState !== 4) {
-                        return;
-                    }
-                    if (request.status === 200) {
-                        outputData();
-                        form.reset();
-                    } else {
-                        errorData(request.status);
-                    }
+            const postData = body => {
+                return new Promise((resolve, reject) => {
+                    const request = new XMLHttpRequest();
+                    request.addEventListener('readystatechange', () => {
+                        if (request.readyState !== 4) {
+                            return;
+                        }
+                        if (request.status === 200) {
+                            resolve();
+                            form.reset();
+                        } else {
+                            reject(request.status);
+                        }
+                    });
+                    request.open('POST', './server.php');
+                    request.setRequestHeader('Content-Type', 'application/json');
+                    request.send(JSON.stringify(body));
                 });
-                request.open('POST', './server.php');
-                request.setRequestHeader('Content-Type', 'application/json');
-                request.send(JSON.stringify(body));
             };
             // Валидация формы.
             form.addEventListener('input', event => {
@@ -367,6 +367,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     target.value = target.value.replace(/[^а-я ]/gi, '');
                 }
             });
+            postData(body)
+                .then()
+                .catch(error);
         });
     };
     sendForm();
