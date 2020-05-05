@@ -336,6 +336,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 request.setRequestHeader('Content-Type', 'application/json');
                 request.send(JSON.stringify(body));
             });
+            const success = () => {
+                statusMessage.textContent = successMessage;
+            };
+            const error = () => {
+                statusMessage.textContent = errorMessage;
+                statusMessage.style.cssText = `font-size: 2rem;
+                color: red; `;
+            };
             form.addEventListener('submit', event => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
@@ -348,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.forEach((val, key) => {
                     body[key] = val;
                 });
-                postData(body).then(successMessage).catch(errorMessage);
+                postData(body).then(success).catch(error);
             });
             // Валидация формы.
             form.addEventListener('input', event => {
