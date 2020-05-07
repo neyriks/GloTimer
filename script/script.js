@@ -319,22 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
         forms.forEach(form => {
-            const postData = body => new Promise((resolve, reject) => {
-                const request = new XMLHttpRequest();
-                request.addEventListener('readystatechange', () => {
-                    if (request.readyState !== 4) {
-                        return;
-                    }
-                    if (request.status === 200) {
-                        resolve();
-                        form.reset();
-                    } else {
-                        reject(request.status);
-                    }
-                });
-                request.open('POST', './server.php');
-                request.setRequestHeader('Content-Type', 'application/json');
-                request.send(JSON.stringify(body));
+            const postData = formData => fetch('./server.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: formData
             });
             const success = () => {
                 statusMessage.textContent = successMessage;
@@ -349,14 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.appendChild(statusMessage);
                 statusMessage.textContent = loadMessage;
                 const formData = new FormData(form);
-                const body = {};
-                // for (const val of formData.entries()) {
-                //     body[val[0]] = val[1];
-                // }
-                formData.forEach((val, key) => {
-                    body[key] = val;
-                });
-                postData(body).then(success).catch(error);
+                postData(formData).then(success, response => {
+                    if (response.status !== 200) {
+                        throw new Error('Status network not 200');
+                    }
+                }).catch(error);
             });
             // Валидация формы.
             form.addEventListener('input', event => {
