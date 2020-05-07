@@ -319,12 +319,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
         forms.forEach(form => {
-            const postData = formData => fetch('./server.php', {
+            const postData = body => fetch('./server.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: formData
+                body: JSON.stringify(body)
             });
             const success = () => {
                 statusMessage.textContent = successMessage;
@@ -339,7 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.appendChild(statusMessage);
                 statusMessage.textContent = loadMessage;
                 const formData = new FormData(form);
-                postData(formData).then(success, response => {
+                const body = {};
+                formData.forEach((val, key) => {
+                    body[key] = val;
+                });
+                postData(body).then(success, response => {
                     if (response.status !== 200) {
                         throw new Error('Status network not 200');
                     }
