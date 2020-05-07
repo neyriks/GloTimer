@@ -318,22 +318,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const forms = document.querySelectorAll('form');
         const statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
+        const postData = body => fetch('./server.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        const success = () => {
+            statusMessage.textContent = successMessage;
+        };
+        const error = () => {
+            statusMessage.textContent = errorMessage;
+            statusMessage.style.cssText = `font-size: 2rem;
+            color: red; `;
+        };
         forms.forEach(form => {
-            const postData = body => fetch('./server.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            });
-            const success = () => {
-                statusMessage.textContent = successMessage;
-            };
-            const error = () => {
-                statusMessage.textContent = errorMessage;
-                statusMessage.style.cssText = `font-size: 2rem;
-                color: red; `;
-            };
             form.addEventListener('submit', event => {
                 event.preventDefault();
                 form.appendChild(statusMessage);
