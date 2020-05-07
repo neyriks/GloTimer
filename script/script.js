@@ -314,9 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendForm = () => {
         const errorMessage = 'Что-то пошло не так',
             loadMessage = 'Загрузка...',
-            successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
-        const forms = document.querySelectorAll('form');
-        const statusMessage = document.createElement('div');
+            successMessage = 'Спасибо! Мы скоро с вами свяжемся!',
+            forms = document.querySelectorAll('form'),
+            statusMessage = document.createElement('div');
         statusMessage.style.cssText = 'font-size: 2rem; color: #fff;';
         const postData = body => fetch('./server.php', {
             method: 'POST',
@@ -325,13 +325,24 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(body)
         });
+        const removeStatusMessage = () => {
+            if (!statusMessage) {
+                return;
+            } else {
+                setTimeout(() => {
+                    statusMessage.remove();
+                }, 5000);
+            }
+        };
         const success = () => {
             statusMessage.textContent = successMessage;
+            removeStatusMessage();
         };
         const error = () => {
             statusMessage.textContent = errorMessage;
             statusMessage.style.cssText = `font-size: 2rem;
             color: red; `;
+            removeStatusMessage();
         };
         forms.forEach(form => {
             form.addEventListener('submit', event => {
